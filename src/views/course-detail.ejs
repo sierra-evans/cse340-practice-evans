@@ -17,6 +17,14 @@
             </div>
         </div>
 
+        <div class="query-params-sort">
+            <% if (queryParams.sort) { %>
+                <p>Currently sorted by: <strong><%= queryParams.sort.charAt(0).toUpperCase() + queryParams.sort.slice(1) %></strong></p>
+            <% } else { %>
+                <p>No sorting selected. Using default sort by <strong>Time</strong>.</p>
+            <% } %>
+        </div>
+
         <div class="section-list">
             <% course.sections.forEach(section => { %>
                 <div class="section-card">
