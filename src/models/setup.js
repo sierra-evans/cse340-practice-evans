@@ -48,9 +48,16 @@ const setupDatabase = async () => {
  * Tests the database connection by executing a simple query.
  */
 const testConnection = async () => {
-    const result = await db.query('SELECT NOW() as current_time');
-    console.log('Database connection successful:', result.rows[0].current_time);
-    return true;
+  const result = await db.query("SELECT NOW() as current_time");
+  // Run practice.sql if it exists (for student assignments)
+  const practicePath = join(__dirname, "sql", "practice.sql");
+  if (fs.existsSync(practicePath)) {
+    const practiceSQL = fs.readFileSync(practicePath, "utf8");
+    await db.query(practiceSQL);
+    console.log("Practice database tables initialized");
+  }
+  console.log("Database connection successful:", result.rows[0].current_time);
+  return true;
 };
 
 export { setupDatabase, testConnection };
