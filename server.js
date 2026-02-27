@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import session from 'express-session';
+import flash from './src/middleware/flash.js';
 import connectPgSimple from 'connect-pg-simple';
 import { caCert } from './src/models/db.js';
 import { startSessionCleanup } from './src/utils/session-cleanup.js';
@@ -70,6 +71,12 @@ app.use(express.json());
  * Global Middleware
  */
 app.use(addLocalVariables);
+
+// Global middleware (sets res.locals variables)
+app.use(addLocalVariables);
+
+// Flash message middleware (must come after session and global middleware)
+app.use(flash);
 
 /**
  * Routes

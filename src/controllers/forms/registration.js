@@ -50,49 +50,36 @@ const processRegistration = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        // TODO: Log validation errors to console for debugging
-        console.error('Validation Errors:', errors.array());
-        // TODO: Redirect back to /register
-        res.redirect('/register');
-        return;
+        errors.array().forEach(error => {
+            req.flash('error', error.msg);
+        });
+        return res.redirect('/register');
     }
 
-    // Extract validated data from request body
-    // TODO: Destructure name, email, password from req.body
-    const { name, email, password } = req.body;
-
     try {
+        // Extract validated data from request body
+        const { name, email, password } = req.body;
         // Check if email already exists in database
-        // TODO: Call emailExists(email) and store the result in a variable
         const exists = await emailExists(email);
 
-        if (/* TODO: check if email exists */exists) {
-            // TODO: Log message: 'Email already registered'
-            console.log('Email already registered:', email);
-            // TODO: Redirect back to /register
-            res.redirect('/register');
-            return;
+        if (exists) {
+            req.flash('warning', 'An account with that email already exists. Please log in or use a different email.');
+            return res.redirect('/register');
         }
 
         // Hash the password before saving to database
-        // TODO: Use bcrypt.hash(password, 10) to hash the password
-        // TODO: Store the result in a variable called hashedPassword
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Save user to database with hashed password
-        // TODO: Call saveUser(name, email, hashedPassword)
         await saveUser(name, email, hashedPassword);
 
-        // TODO: Log success message to console
-        console.log('User registered successfully:', email);
-        // TODO: Redirect to /register/list to show successful registration
-        res.redirect('/register/list');
+        req.flash('success', 'Registration successful! You may now log in.');
+        return res.redirect('/login');
         // NOTE: Later when we add authentication, we'll change this to require login first
     } catch (error) {
-        // TODO: Log the error to console
         console.error('Registration Error:', error);
-        // TODO: Redirect back to /register
-        res.redirect('/register');
+        req.flash('error', 'Unable to complete registration. Please try again later.');
+        return res.redirect('/register');
     }
 };
 
