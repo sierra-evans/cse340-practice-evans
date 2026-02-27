@@ -7,6 +7,11 @@ import { homePage, aboutPage, demoPage, testErrorPage } from './index.js';
 import { facultyListPage, facultyDetailPage } from './faculty/faculty.js';
 import contactRoutes from './forms/contact.js';
 import registrationRoutes from './forms/registration.js';
+import { 
+    contactValidation, 
+    registrationValidation, 
+    loginValidation,
+    editValidation} from '../middleware/validation/forms.js';
 import { Router } from 'express';
 
 // Create a new router instance

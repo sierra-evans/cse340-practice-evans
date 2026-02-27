@@ -25,6 +25,9 @@
           <a href="mailto:<%= member.email %>"><%= member.email %></a>
         </p>
         <p class="faculty-phone">Phone: <%= member.phone %></p>
+        <img src="/images/faculty/<%= member.slug %>.jpg" 
+        alt="Photo of <%= member.name %>" 
+        class="faculty-photo">
       </div>
     <% }) %>
   </div>
